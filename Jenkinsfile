@@ -21,14 +21,14 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing Node.js dependencies...'
-                bat 'npm install'
+                bat 'npm install -force'
             }
         }
 
         stage('Prisma Migrations') {
             steps {
                 echo 'Running Prisma migrations on NeonDB...'
-                bat 'npx prisma migrate deploy'
+                bat 'npx prisma migrate deploy -force'
             }
         }
 
