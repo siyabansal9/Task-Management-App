@@ -28,7 +28,7 @@ pipeline {
         stage('Prisma Migrations') {
             steps {
                 echo 'Running Prisma migrations on NeonDB...'
-                bat 'npx prisma migrate deploy -force'
+                bat 'npx prisma migrate deploy'
             }
         }
 
