@@ -1,8 +1,13 @@
 pipeline {
-    agent any  // Run on any available Jenkins agent
+    agent any
 
     environment {
-        DOTENV = '.env'  // Path to your .env file
+        DATABASE_URL = credentials('DATABASE_URL')
+        JWT_SECRET = credentials('JWT_SECRET')
+        CLOUDINARY_CLOUD_NAME = credentials('CLOUDINARY_CLOUD_NAME')
+        CLOUDINARY_API_KEY = credentials('CLOUDINARY_API_KEY')
+        CLOUDINARY_API_SECRET = credentials('CLOUDINARY_API_SECRET')
+        PORT = '3000'
     }
 
     stages {
@@ -10,21 +15,6 @@ pipeline {
             steps {
                 echo 'Checking out code from GitHub...'
                 git branch: 'main', url: 'https://github.com/siyabansal9/Task-Management-App.git'
-            }
-        }
-
-        stage('Load .env') {
-            steps {
-                echo 'Loading environment variables...'
-                script {
-                    def props = readFile(DOTENV).split("\n")
-                    for (line in props) {
-                        if (line.trim() && !line.startsWith("#")) {
-                            def (key, value) = line.split("=", 2)
-                            env[key] = value
-                        }
-                    }
-                }
             }
         }
 
@@ -52,9 +42,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying application...'
-                // Example deployment: run Node server in background
                 sh 'nohup node dist/main.js &'
-                echo 'App deployed and running!'
+                echo 'Application deployed and running!'
             }
         }
     }
