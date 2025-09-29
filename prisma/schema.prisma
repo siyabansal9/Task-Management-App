@@ -1,0 +1,45 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  name     String
+  email    String  @unique
+  password String
+  tasks    Task[]  @relation("UserTasks")
+}
+
+model Project {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  tasks       Task[]
+}
+
+model Task {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  status      String   @default("TODO")
+  project     Project  @relation(fields: [projectId], references: [id])
+  projectId   Int
+  assignee    User?    @relation("UserTasks", fields: [assigneeId], references: [id])
+  assigneeId  Int?
+  files       File[]
+}
+
+model File {
+  id         Int      @id @default(autoincrement())
+  filename   String
+  path       String
+  task       Task?    @relation(fields: [taskId], references: [id])
+  taskId     Int?
+  uploadedAt DateTime @default(now())
+}
+
