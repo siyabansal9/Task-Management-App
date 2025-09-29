@@ -34,7 +34,7 @@ export class ProjectsService {
       // If already a NestJS exception, rethrow
       if (err.status) throw err;
 
-      throw new InternalServerErrorException('Failed to fetch project');
+      throw new InternalServerErrorException('Failed to fetch the project');
     }
   }
 
